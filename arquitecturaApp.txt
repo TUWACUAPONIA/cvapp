@@ -1,0 +1,163 @@
+Arquitectura de la Aplicación SAAS
+
+1. Tecnologías Base
+   - Framework: Next.js 13+ con App Router
+   - Lenguaje: TypeScript
+   - Estilos: Tailwind CSS
+   - Base de Datos: Prisma (SQL)
+   - Almacenamiento: Firebase Storage
+   - OCR: Tesseract
+   - IA: OpenAI GPT para análisis de CVs
+   - Procesamiento de Documentos: Mammoth (DOCX), PDF Parser
+
+2. Estructura de Directorios y Archivos Principales
+
+/src
+├── app/                    # Rutas y páginas de Next.js
+│   ├── api/               # Endpoints de la API
+│   │   ├── cv/route.ts    # API para gestión de CVs
+│   │   │                  # - POST: Subida y procesamiento de CVs
+│   │   │                  # - GET: Obtención paginada de CVs
+│   │   │                  # - DELETE: Eliminación de CVs
+│   │   ├── ocr/route.ts   # API para procesamiento OCR
+│   │   │                  # - Extracción de texto de PDFs y DOCXs
+│   │   │                  # - Integración con GPT para análisis
+│   │   ├── job-positions/ # API para gestión de puestos
+│   │   └── test-*/       # Endpoints de prueba
+│   ├── dashboard/        # Página de visualización de CVs
+│   ├── upload/          # Página de subida y procesamiento
+│   └── test/           # Páginas de prueba
+├── components/          # Componentes React reutilizables
+│   ├── CVList.tsx      # Lista y gestión de CVs subidos
+│   ├── CVPreview.tsx   # Visualización de CV procesado
+│   ├── CVUpload.tsx    # Formulario de subida con:
+│   │                   # - Validación de archivos
+│   │                   # - Extracción de texto
+│   │                   # - Preview de datos
+│   │                   # - Edición de información
+│   ├── JobPositions    # Gestión de puestos de trabajo
+│   ├── Navigation      # Navegación de la aplicación
+│   └── OCRStatus       # Monitoreo de proceso OCR
+├── lib/                # Utilidades y servicios
+│   ├── document-parser.ts # Parser genérico de documentos
+│   ├── firebase.ts    # Configuración y funciones de Firebase
+│   │                  # - Almacenamiento de archivos
+│   │                  # - CRUD de candidatos y CVs
+│   ├── openai.ts      # Integración con GPT para análisis
+│   ├── pdf-parser.ts  # Funciones específicas para PDFs
+│   ├── prisma.ts      # Cliente y configuración de Prisma
+│   └── utils.ts       # Utilidades generales
+└── types/             # Definiciones de tipos TypeScript
+
+3. Flujo de Datos y Procesos
+
+A. Subida y Procesamiento de CV
+   1. Frontend (CVUpload.tsx):
+      - Validación inicial de archivo (tipo, tamaño)
+      - Extracción preliminar de texto
+      - Interfaz de edición de datos extraídos
+      - Preview antes de envío
+
+   2. Backend (api/cv/route.ts):
+      - Validación secundaria de archivo
+      - Procesamiento de documento según tipo:
+        * PDF: Extracción de texto con pdf-parser
+        * DOCX: Extracción con Mammoth
+      - Almacenamiento en Firebase Storage
+      - Análisis con GPT para evaluación
+
+   3. Almacenamiento:
+      - Archivos: Firebase Storage
+      - Metadatos: Base de datos SQL (Prisma)
+      - Información estructurada: Firestore
+
+B. Análisis y Evaluación
+   1. Extracción de Información:
+      - Datos personales (nombre, email, teléfono)
+      - Experiencia profesional
+      - Habilidades técnicas
+      - Educación
+
+   2. Evaluación con IA:
+      - Comparación con requisitos del puesto
+      - Puntuación de compatibilidad
+      - Generación de feedback detallado
+
+4. Características Principales
+
+A. Gestión de CVs
+   - Subida múltiple de formatos (PDF, DOCX)
+   - Extracción automática de información
+   - Validación y edición de datos extraídos
+   - Almacenamiento seguro de documentos
+   - Historial y seguimiento de CVs
+
+B. Análisis Inteligente
+   - Procesamiento OCR para documentos escaneados
+   - Análisis semántico con GPT
+   - Evaluación contra requisitos de puesto
+   - Puntuación automática de candidatos
+   - Feedback detallado de compatibilidad
+
+C. Gestión de Puestos
+   - Creación y edición de posiciones
+   - Definición de requisitos
+   - Evaluación automática de compatibilidad
+   - Seguimiento de candidatos por puesto
+
+D. Interfaz y Usabilidad
+   - Dashboard interactivo
+   - Previsualizaciones en tiempo real
+   - Edición de información extraída
+   - Filtros y búsqueda avanzada
+
+5. Seguridad e Integridad
+
+A. Validación de Datos
+   - Verificación de tipos de archivo
+   - Límites de tamaño (5MB máximo)
+   - Sanitización de datos extraídos
+   - Validación de formatos (email, teléfono)
+
+B. Almacenamiento Seguro
+   - Reglas de Firebase Storage
+   - Reglas de Firestore
+   - Encriptación de datos sensibles
+   - Backups automáticos
+
+C. Protección de API
+   - Validación de requests
+   - Rate limiting
+   - Manejo de errores robusto
+   - Logging de operaciones críticas
+
+D. Tipado y Validación
+   - TypeScript estricto
+   - Interfaces definidas
+   - Validación de schemas
+   - Manejo de casos edge
+
+6. Herramientas y Utilidades de Desarrollo
+
+A. Calidad de Código
+   - ESLint con reglas personalizadas
+   - Prettier para formateo
+   - TypeScript en modo estricto
+   - Husky para pre-commit hooks
+
+B. Base de Datos
+   - Prisma para migraciones
+   - Modelos tipados
+   - Relaciones automáticas
+
+C. Testing y Depuración
+   - Logs detallados
+   - Manejo de errores consistente
+   - Endpoints de prueba
+   - Monitoreo de procesos
+
+D. Desarrollo y Despliegue
+   - Scripts NPM personalizados
+   - Configuración de desarrollo local
+   - Variables de entorno gestionadas
+   - Pipeline de despliegue automatizado

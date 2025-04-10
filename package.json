@@ -1,0 +1,39 @@
+{
+  "name": "appcv",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "seed": "tsc -p src/scripts/tsconfig.json && node -r dotenv/config dist/scripts/seedFirestore.js"
+  },
+  "dependencies": {
+    "@types/react": "18.2.56",
+    "@types/react-dom": "18.2.19",
+    "@types/uuid": "^10.0.0",
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "firebase": "^10.7.0",
+    "mammoth": "^1.6.0",
+    "next": "^13.4.19",
+    "pdf2json": "^3.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "5.3.3",
+    "undici": "^5.27.2",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.25.9",
+    "@types/node": "^20.11.0",
+    "autoprefixer": "^10.4.14",
+    "babel-loader": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
+  }
+}

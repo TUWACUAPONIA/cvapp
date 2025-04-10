@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Reglas para la colección de CVs
+    match /cvs/{document=**} {
+      allow read, write: if true;  // Temporalmente permitimos todas las operaciones para pruebas
+    }
+    
+    // Reglas para la colección de candidatos
+    match /candidates/{document=**} {
+      allow read, write: if true;  // Temporalmente permitimos todas las operaciones para pruebas
+    }
+    
+    // Reglas para la colección de puestos de trabajo
+    match /jobPositions/{document=**} {
+      allow read, write: if true;  // Temporalmente permitimos todas las operaciones para pruebas
+    }
+    
+    // En producción, deberías usar reglas más restrictivas, por ejemplo:
+    // match /{collection}/{document=**} {
+    //   allow read: if request.auth != null;
+    //   allow write: if request.auth != null 
+    //               && request.resource.data.keys().hasAll(['createdAt', 'updatedAt'])
+    //               && request.resource.data.createdAt is timestamp
+    //               && request.resource.data.updatedAt is timestamp;
+    // }
+  }
+}

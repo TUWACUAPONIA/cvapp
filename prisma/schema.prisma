@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Candidate {
+  id              String       @id @default(cuid())
+  email           String       @unique
+  name            String
+  phone           String?
+  location        String?
+  birthDate       String?      // Fecha de nacimiento
+  age             Int?         // Edad
+  currentRole     String?      // Puesto actual o último puesto
+  experience      String?      // Experiencia laboral resumida
+  skills          String[]     // Habilidades principales
+  summary         String?      @db.Text // Resumen profesional
+  cvs             CV[]
+  evaluations     Evaluation[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model CV {
+  id          String       @id @default(cuid())
+  fileName    String
+  fileUrl     String
+  content     String       @db.Text
+  candidate   Candidate    @relation(fields: [candidateId], references: [id])
+  candidateId String
+  evaluations Evaluation[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model JobRequirement {
+  id          String       @id @default(cuid())
+  title       String
+  description String       @db.Text
+  skills      String[]
+  experience  String?
+  education   String?
+  evaluations Evaluation[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Evaluation {
+  id               String         @id @default(cuid())
+  cv               CV             @relation(fields: [cvId], references: [id])
+  cvId             String
+  candidate        Candidate      @relation(fields: [candidateId], references: [id])
+  candidateId      String
+  jobRequirement   JobRequirement @relation(fields: [jobRequirementId], references: [id])
+  jobRequirementId String
+  score           Int
+  feedback        String         @db.Text
+  status          String         @default("pending") // pending, contacted, interviewed, hired, rejected
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
